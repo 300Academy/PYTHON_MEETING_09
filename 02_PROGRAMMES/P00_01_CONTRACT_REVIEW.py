@@ -122,7 +122,11 @@ print(f'Test mode: {ZV_BO_TEST_MODE}')
 print(f'LLM disabled: {ZV_BO_TEST_MODE_WO_LLM}')
 print(f'Categories: {len(ZV_LI_CATEGORIES)}')
 
-if not ZV_BO_TEST_MODE_WO_LLM:
+if ZV_BO_TEST_MODE_WO_LLM:
+    ZV_OB_TOKENIZER = None
+    ZV_OB_LLM_MODEL = None
+
+else:
     # 3.1/ Login to HuggingFace
     PI_HUGGINGFACE_HUB_LOGIN(ZV_ST_HUGGINGFACE_KEY)
 
@@ -147,11 +151,7 @@ if not ZV_BO_TEST_MODE_WO_LLM:
     print(f'Model device: {ZV_OB_LLM_MODEL.device}')
 
     # 3.6/ Confirm that setup is complete
-    print('Run complete')
-
-else:
-    ZV_OB_TOKENIZER = None
-    ZV_OB_LLM_MODEL = None
+    print('Run complete')    
 
 
 # ==========================
@@ -228,13 +228,15 @@ def FC_GENERATE_RESPONSE(ZVFCI_ST_CONTENT, ZVFCI_LI_CATEGORIES):
         else:
             ZV_ST_CHAT_TEMPLATE = ZV_ST_PROMPT
 
-        if not ZV_BO_TEST_MODE: 
+        if  ZV_BO_TEST_MODE: 
             ZV_LI_LI_INPUT_TOKEN_IDS = (
                 ZV_OB_TOKENIZER
                 .encode(
                     ZV_ST_CHAT_TEMPLATE,
                     add_special_tokens=False,
-                    return_tensors='pt'                
+                    return_tensors='pt',
+                    truncation=True,
+                    max_length=512                
                 )
                 .to(ZV_OB_LLM_MODEL.device)
             )
@@ -244,9 +246,7 @@ def FC_GENERATE_RESPONSE(ZVFCI_ST_CONTENT, ZVFCI_LI_CATEGORIES):
                 .encode(
                     ZV_ST_CHAT_TEMPLATE,
                     add_special_tokens=False,
-                    return_tensors='pt',
-                    truncation=True,
-                    max_length=512                
+                    return_tensors='pt'                
                 )
                 .to(ZV_OB_LLM_MODEL.device)
             ) 

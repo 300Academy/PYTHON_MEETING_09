@@ -12,7 +12,11 @@ You will find the options to turn on and off test mode in AM_VARIABLES.
 
 This program does not require you to input the root folder address. The program will infer the folder address. However, you need to make sure that you respect the folder structure as mentioned below for this inference to work.
 
-### 1/ Create Virtual Environment
+### 1/ Create Virtual Environment (if you are running on a Windows machine and not on Kaggle)
+
+If you want to run the code on a Windows PC or your local machine, you need to create a Virtual Enviornment. If you are going to use Kaggle, then Kaggle will automatically create the environment for you and you will not be able to control the Python version of that environment.
+
+For this project, we need to use the 3.12 version of Python, because this is compatible with PI_SUBPROCESS, that we use to automatically install the Python libraries. 
 
 Ensure that you have Python version 3.12 on your machine. If you do not have it, download it from https://www.python.org/downloads. 
 
@@ -56,15 +60,14 @@ ZV_ST_HUGGINGFACE_KEY=hf_sFIXXXXXcKNtLpJsPbaZ
 
 ### 5/ Run the script
 
-The first time you run the program, set the variables in AM_VARIABLES to:
-
-ZV_ST_MODEL_ID=sshleifer/tiny-gpt2
+To run in test mode, set the variables in AM_VARIABLES to: (Note: for the model, it will be overwritten to sshleifer/tiny-gpt2, with ZV_ST_TEST_MODE= True)
+ZV_ST_MODEL_ID=google/gemma-3-1b-it
 ZV_ST_CATEGORIES='Contract Date,Effective Date,Renewal Term,Exit clause incl. notice period,Contract Parties,Documents Retention Period,Audit Clause,Audit Frequency,Audit Duration,Contract Fees,Payment Terms,Contract scope,KPIs,Service Level Agreement,Roles & Responsibilities,Deliverables,Contractual Reporting,Performance Review,Performance Bonus,Data Protection and Privacy,Confidentiality'
 ZV_ST_TEST_MODE=True
 ZV_ST_TEST_MODE_WO_LLM=True
 ZV_ST_RESULTS_FILE=ContractReviewResults.xlsx
 
-You can then try running with: 
+If test mode is successful run with: 
 ZV_ST_MODEL_ID=google/gemma-3-1b-it
 ZV_ST_CATEGORIES='Contract Date,Effective Date,Renewal Term,Exit clause incl. notice period,Contract Parties,Documents Retention Period,Audit Clause,Audit Frequency,Audit Duration,Contract Fees,Payment Terms,Contract scope,KPIs,Service Level Agreement,Roles & Responsibilities,Deliverables,Contractual Reporting,Performance Review,Performance Bonus,Data Protection and Privacy,Confidentiality'
 ZV_ST_TEST_MODE=False
@@ -74,6 +77,12 @@ ZV_ST_RESULTS_FILE=ContractReviewResults.xlsx
 ```bash
 python P00_01_CONTRACT_REVIEW.py
 ```
+
+Note: if you are running the script in Kaggle, you cannot easily update the AM_VARIABLES file. Therefore, if you want to change the test mode in Kaggle, you can uncomment the following rows inside P00_01_CONTRACT_REVIEW of the Kaggle Notebook editor - to turn on or off test mode (overwrite the test variables from AM_VARIABLES):
+
+# ZV_BO_TEST_MODE = True
+# ZV_BO_TEST_MODE_WO_LLM = True
+
 
 If your VSC is picking up the wrong python.exe - ensure that your venv folder is in the 02_PROGRAMMES folder and that the terminal is in the 02_PROGRAMMES folder and then run the script with direct reference to the python.exe in the virtual environment: 
 
