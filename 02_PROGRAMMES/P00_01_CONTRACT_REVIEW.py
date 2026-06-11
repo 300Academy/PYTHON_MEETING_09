@@ -79,17 +79,18 @@ ZV_ST_SOURCES_FOLDER = PI_OS.path.join(
         ZV_ST_ROOT_FOLDER,
         '01_SOURCES'
     )
-if not ZV_BO_IS_KAGGLE: 
-    ZV_ST_RESULTS_FOLDER = PI_OS.path.join(
-        ZV_ST_ROOT_FOLDER,
-        '03_RESULTS'
-    )
-else:
+if ZV_BO_IS_KAGGLE: 
     ZV_ST_RESULTS_FOLDER = PI_OS.path.join(
         PI_OS.sep,
         'kaggle',
         'working'
-    )
+    )    
+else:
+    ZV_ST_RESULTS_FOLDER = PI_OS.path.join(
+        ZV_ST_ROOT_FOLDER,
+        '03_RESULTS'
+    )    
+
         
 ZV_BO_TEST_MODE = ((ZV_DI_VARIABLES.get('ZV_ST_TEST_MODE')).lower()=='true')
 ZV_LI_CATEGORIES = [

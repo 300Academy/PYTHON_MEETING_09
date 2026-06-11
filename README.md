@@ -65,7 +65,7 @@ ZV_ST_TEST_MODE_WO_LLM=True
 ZV_ST_RESULTS_FILE=ContractReviewResults.xlsx
 
 You can then try running with: 
-ZV_ST_MODEL_ID=sgoogle/gemma-3-1b-it
+ZV_ST_MODEL_ID=google/gemma-3-1b-it
 ZV_ST_CATEGORIES='Contract Date,Effective Date,Renewal Term,Exit clause incl. notice period,Contract Parties,Documents Retention Period,Audit Clause,Audit Frequency,Audit Duration,Contract Fees,Payment Terms,Contract scope,KPIs,Service Level Agreement,Roles & Responsibilities,Deliverables,Contractual Reporting,Performance Review,Performance Bonus,Data Protection and Privacy,Confidentiality'
 ZV_ST_TEST_MODE=False
 ZV_ST_TEST_MODE_WO_LLM=False
@@ -144,7 +144,7 @@ Analysis parameters can be updated in:
 
 Update the variables to control the model that you wish to use and whether or not you are in test mode:
 
-ZV_ST_MODEL_ID=sgoogle/gemma-3-1b-it ... real gemma model that can read paragraphs of text for similar meaning
+ZV_ST_MODEL_ID=google/gemma-3-1b-it ... real gemma model - set to sshleifer/tiny-gpt2 for quick test with ZV_ST_TEST_MODE = true
 ZV_ST_CATEGORIES='Contract Date,Effective Date,Renewal Term,Exit clause incl. notice period,Contract Parties,Documents Retention Period,Audit Clause,Audit Frequency,Audit Duration,Contract Fees,Payment Terms,Contract scope,KPIs,Service Level Agreement,Roles & Responsibilities,Deliverables,Contractual Reporting,Performance Review,Performance Bonus,Data Protection and Privacy,Confidentiality'
 ZV_ST_TEST_MODE=False ... do not truncate the text or tokens, etc, run on all the files
 ZV_ST_TEST_MODE_WO_LLM=False .. .actually download and use the model
