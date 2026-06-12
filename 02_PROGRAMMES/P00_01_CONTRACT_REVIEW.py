@@ -68,6 +68,7 @@ import re as PI_RE
 import pandas as PI_PANDAS
 from IPython.display import display as PI_DISPLAY, HTML
 import polars as PI_POLARS
+import time as PI_TIME
 
 # 1.4/ Import other custom functions
 from Z_SHARED_FUNCTIONS.FC_EXPORT import FC_EXPORT_EXCEL_POLARS
@@ -197,8 +198,6 @@ def FC_EXTRACT_TEXT_FROM_DOC(ZVFCI_ST_DOC_PATH):
 # STEP 6 : Define response generation function
 # ==========================
 
-import time as PI_TIME
-
 def FC_GENERATE_RESPONSE(ZVFCI_ST_CONTENT, ZVFCI_LI_CATEGORIES):
 
     ZV_DI_OUTPUTS = {}
@@ -216,7 +215,9 @@ def FC_GENERATE_RESPONSE(ZVFCI_ST_CONTENT, ZVFCI_LI_CATEGORIES):
             {'role': 'user', 'content': ZV_ST_PROMPT}
         ]
 
-        if ZV_OB_TOKENIZER.chat_template is not None:
+        if ZV_OB_TOKENIZER.chat_template is None:
+            ZV_ST_CHAT_TEMPLATE = ZV_ST_PROMPT                        
+        else:
             ZV_ST_CHAT_TEMPLATE = (
                 ZV_OB_TOKENIZER
                 .apply_chat_template(
@@ -225,10 +226,8 @@ def FC_GENERATE_RESPONSE(ZVFCI_ST_CONTENT, ZVFCI_LI_CATEGORIES):
                     add_generation_prompt=True
                 )
             )
-        else:
-            ZV_ST_CHAT_TEMPLATE = ZV_ST_PROMPT
 
-        if  ZV_BO_TEST_MODE: 
+        if ZV_BO_TEST_MODE: 
             ZV_LI_LI_INPUT_TOKEN_IDS = (
                 ZV_OB_TOKENIZER
                 .encode(
@@ -251,18 +250,7 @@ def FC_GENERATE_RESPONSE(ZVFCI_ST_CONTENT, ZVFCI_LI_CATEGORIES):
                 .to(ZV_OB_LLM_MODEL.device)
             ) 
 
-        if not ZV_BO_TEST_MODE:         
-            ZV_LI_LI_OUTPUT_TOKEN_IDS = (
-                ZV_OB_LLM_MODEL
-                .generate(
-                    input_ids=ZV_LI_LI_INPUT_TOKEN_IDS,
-                    do_sample=True,
-                    temperature=0.3,
-                    top_p=0.9,
-                    max_new_tokens=512
-                )
-            )
-        else:
+        if ZV_BO_TEST_MODE:         
             ZV_LI_LI_OUTPUT_TOKEN_IDS = (
                 ZV_OB_LLM_MODEL
                 .generate(
@@ -273,7 +261,18 @@ def FC_GENERATE_RESPONSE(ZVFCI_ST_CONTENT, ZVFCI_LI_CATEGORIES):
                     max_new_tokens=50,
                     pad_token_id=ZV_OB_TOKENIZER.eos_token_id
                 )
-            )            
+            ) 
+        else:
+            ZV_LI_LI_OUTPUT_TOKEN_IDS = (
+                ZV_OB_LLM_MODEL
+                .generate(
+                    input_ids=ZV_LI_LI_INPUT_TOKEN_IDS,
+                    do_sample=True,
+                    temperature=0.3,
+                    top_p=0.9,
+                    max_new_tokens=512
+                )
+            )           
 
         ZV_ST_OUTPUT = (
             ZV_OB_TOKENIZER
@@ -330,7 +329,7 @@ def FC_CLEAN_RESPONSE(ZVFCI_DI_OUTPUTS, ZFCI_ST_FILENAME):
     
     # ✅ Create a clean, organized DataFrame
     ZV_DF = PI_PANDAS.DataFrame({
-        'ZV_ST_FILENAME': ZFCI_ST_FILENAME,           # <-- Auto-filled real file name
+        'ZF_ST_FILENAME': ZFCI_ST_FILENAME,           # <-- Auto-filled real file name
         'ZF_ST_CATEGORY': ZV_LI_CATEGORIES,
         'ZF_ST_SENTENCES': ZV_LI_SENTENCES
     })
@@ -398,7 +397,7 @@ for ZV_NU_FILE_INDEX, ZV_OB_FILE in enumerate(PI_OS.listdir(ZV_ST_SOURCES_FOLDER
         }
     else:
         ZV_DI_RESPONSE = FC_GENERATE_RESPONSE(
-            ZV_ST_CONTRACT_TEXT,
+            ZV_ST_CONTRACT_TEXT,-
             ZV_LI_CATEGORIES
         )
     print('✅ Response generation complete!')        
@@ -461,6 +460,7 @@ PI_DISPLAY(HTML(ZV_ST_CUSTOM_CSS + f"""
 
 # 💾 Save to Excel for full offline review
 ZV_DF_ALL_OUTPUTS_POLARS = PI_POLARS.from_pandas(ZV_DF_ALL_OUTPUTS)
+
 FC_EXPORT_EXCEL_POLARS(ZV_DF_ALL_OUTPUTS_POLARS,ZV_ST_RESULTS_FOLDER, ZV_ST_RESULTS_FILE)
 
 print(f'✅ Saved formatted results to: {ZV_ST_RESULTS_FOLDER}')

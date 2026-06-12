@@ -48,6 +48,19 @@ After activation, open a Python File from the 02_PROGRAMMES folder and check tha
 
 In this python project, the requirements will be installed automatically based on requirements.txt
 
+If you are running the script in Kaggle, then Kaggle will create a Linux VM and run the script on Linux. In that case, the script will automatically install the Linux library: antiword. This library is used to import and read .doc files.
+
+If you are running the program on a Windows machine, you need to download antiword and add it to your Windows path:
+```text
+- Get antiword here: https://www.softpedia.com/get/Office-tools/Other-Office-Tools/Antiword.shtml?utm_source=chatgpt.com#download
+- Unzip in a folder Antiword, within your C:\Program Files (x86)\Antiword
+- Click on the Windows button
+- Search for Edit environment variables in settings
+- In the User variabels for User box, click on Path
+- Click on New
+- Add the path to the folder where antiword.exe is found
+- Close and open visual studio code
+- The script should now be able to use antiword when importing .doc files
 ---
 
 ### 4/ Create a .env file from the .env.example 

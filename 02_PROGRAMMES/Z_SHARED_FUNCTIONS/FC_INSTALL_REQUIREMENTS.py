@@ -5,14 +5,14 @@ import os as PI_OS
 
 def FC_INSTALL_REQUIREMENTS(*,ZVFCI_ST_02PROG_FOLDER): 
 
-    ZV_OB_ROOT_FOLDER = PI_PATH(ZVFCI_ST_02PROG_FOLDER)
+    ZV_OB_02PROG_FOLDER = PI_PATH(ZVFCI_ST_02PROG_FOLDER)
 
     # 1/ Find requirements.txt
     ZV_LI_OB_PATH_REQ_FILES = list(
-        ZV_OB_ROOT_FOLDER.rglob('requirements.txt')
+        ZV_OB_02PROG_FOLDER.rglob('requirements.txt')
     )
     if not ZV_LI_OB_PATH_REQ_FILES:
-        raise FileNotFoundError(f'No requirements.txt file found under {ZV_OB_ROOT_FOLDER}')
+        raise FileNotFoundError(f'No requirements.txt file found under {ZV_OB_02PROG_FOLDER}')
 
     ZV_OB_PATH_REQUIREMENTS_FILE = ZV_LI_OB_PATH_REQ_FILES[0]
 
